@@ -6,10 +6,13 @@
 #include <string>
 #include <cmath>
 #include <ctime>  
+#include <filesystem>
+#include <conio.h>
+#include <cstdlib>
 
 typedef unsigned char BYTE;
 using namespace std;
-
+using namespace filesystem;
 
 //Prototype
 
@@ -17,10 +20,11 @@ void _2D_8x8_DCT();
 void _2D_8x8_IDCT();
 void _2D_8x8_Sep_DCT();
 void _2D_8x8_Sep_IDCT();
-
+void makedir();
 //main
 
 int main() {
+	makedir();
 	while (1) {
 		cout << "1. 8x8 2D DCT" << endl;
 		cout << "2. 8x8 2D IDCT" << endl;
@@ -30,6 +34,12 @@ int main() {
 		cout << "Select mode : ";
 		int mode;
 		cin >> mode;
+		cout << "==============File entries in Input Folder===================" << endl;
+		
+			std::string path = "Input";
+			for (const auto& entry : directory_iterator(path))
+				std::cout << entry.path().filename() << std::endl;
+		cout << "=============================================================" << endl;
 		switch (mode) {
 		case 1:
 			cout << "(8x8 2D DCT) Input file name : ";
@@ -56,9 +66,25 @@ int main() {
 		default:
 			return 0;
 		}
+
+		cout << "press any key.." << endl;
+		while (1)
+			if (_kbhit())
+				break;
+		system("cls");
 	}
 }
 
+void makedir(){
+	if (!is_directory("DCT"))
+		create_directory("DCT");
+	if (!is_directory("IDCT"))
+		create_directory("IDCT");
+	if (!is_directory("SepDCT"))
+		create_directory("SepDCT");
+	if (!is_directory("SepIDCT"))
+		create_directory("SepIDCT");
+}
 
 void _2D_8x8_DCT() {
 	//Read File	
